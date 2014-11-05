@@ -65,7 +65,7 @@ object ApplicationBuild extends Build {
     publishArtifact in Test := false,
     pomIncludeRepository := { _ => false },
 
-    Seq("SONATYPE_USER", "SONATYPE_PASS") map Properties.envOrNone match {
+    Seq("SONATYPE_USERNAME", "SONATYPE_PASSWORD") map Properties.envOrNone match {
       case Seq(Some(user), Some(pass)) =>
         credentials += Credentials("Sonatype Nexus Repository Manager", "oss.sonatype.org", user, pass)
       case _ => credentials in ThisBuild ~= identity
