@@ -1,14 +1,15 @@
 language: scala
 scala:
-  - 2.10.4
-  - 2.11.2
+- 2.10.4
+- 2.11.4
 env:
   global:
-    secure: irOi2r3fey1ecrQOgaTzUredRTY7vafdcBc+nY6eJRtwN/U3qnmgbbXlmj9QIa2mLmWPpumv1nQjHcNS5XMp+Vluu6y1HAv4wPiOs4FCzqNav4yBWt6LFGRmXV/yatgj4Gzm1sFqmJRg80RfNdc5kuvmxpyOnCJAPPSfh6pBH3k=
-
+  - secure: jfrv5fJCz7Ryo/CYniB9P3KGZt580mRxuFblFfK6kUtib9NYmGW7ZYJUFs/IbIbKhY/vE0Jt1ksoORIBCMcxshvYSMC3LFsdEq/tuM92aUKt04y0R43gaoXyGsOeuzKujdQBuh1SooCwaGIugioMnuMUGnSFhWSUyqbNQa2k6YE=
 script: sbt ++$TRAVIS_SCALA_VERSION test
 after_success:
-- test $TRAVIS_PULL_REQUEST == "false" && test $TRAVIS_BRANCH == "master" && sbt ++$TRAVIS_SCALA_VERSION publish
-- test $TRAVIS_SCALA_VERSION == "2.11.2" && test $TRAVIS_PULL_REQUEST == "false" && test $TRAVIS_BRANCH == "master"
+- test $TRAVIS_PULL_REQUEST == "false" && test $TRAVIS_BRANCH == "master" && sbt ++$TRAVIS_SCALA_VERSION
+  publish
+- test $TRAVIS_SCALA_VERSION == "2.11.4" && test $TRAVIS_PULL_REQUEST == "false" &&
+  test $TRAVIS_BRANCH == "master"
 notifications:
-  irc: "chat.freenode.net#http4s"
+  irc: chat.freenode.net#http4s
