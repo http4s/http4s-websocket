@@ -6,8 +6,8 @@ object ApplicationBuild extends Build {
 
   /* Projects */
   lazy val `http4s-websocket` = project
-                    .in(file("."))
-                    .settings(buildSettings: _*)
+    .in(file("."))
+    .settings(buildSettings: _*)
 
   val JvmTarget = "1.7"
 
@@ -45,11 +45,8 @@ object ApplicationBuild extends Build {
      s"-target:jvm-${JvmTarget}"
     ),
 
-    fork in run := true
-  )
+    fork in run := true,
 
-  /* dependencies */
-  lazy val dependencies = Seq(
     libraryDependencies += specs2 % "test"
   )
 
