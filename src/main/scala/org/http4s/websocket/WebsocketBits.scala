@@ -28,6 +28,8 @@ object WebsocketBits {
 
     case WebsocketBits.BINARY => Binary(data, last)
 
+    case WebsocketBits.CONTINUATION => Continuation(data, last)
+
     case WebsocketBits.PING =>
       if (!last) throw new ProtocolException("Control frame cannot be fragmented: Ping")
       else Ping(data)

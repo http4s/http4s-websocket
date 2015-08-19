@@ -65,6 +65,14 @@ class WebsocketSpec extends Specification {
       new String(msg.data, UTF_8) should_== "Hello"
     }
 
+    "encode a continuation message" in {
+      val frame = Continuation("Hello".getBytes(UTF_8), true)
+      val msg = decode(encode(frame, true), false)
+      msg should_== frame
+      msg.last should_== true
+      new String(msg.data, UTF_8) should_== "Hello"
+    }
+
     "encode and decode a message with 125 < len <= 0xffff" in {
       val bytes = (0 until 0xfff).map(_.toByte).toArray
       val frame = Binary(bytes, false)
