@@ -2,14 +2,21 @@ language: scala
 scala:
 - 2.10.4
 - 2.11.4
+
+jdk: oraclejdk7
+
+sudo: false
+cache:
+  directories:
+    - $HOME/.ivy2/cache
+
 env:
   global:
   - secure: jfrv5fJCz7Ryo/CYniB9P3KGZt580mRxuFblFfK6kUtib9NYmGW7ZYJUFs/IbIbKhY/vE0Jt1ksoORIBCMcxshvYSMC3LFsdEq/tuM92aUKt04y0R43gaoXyGsOeuzKujdQBuh1SooCwaGIugioMnuMUGnSFhWSUyqbNQa2k6YE=
+
 script: sbt ++$TRAVIS_SCALA_VERSION test
 after_success:
 - test $TRAVIS_PULL_REQUEST == "false" && test $TRAVIS_BRANCH == "master" && sbt ++$TRAVIS_SCALA_VERSION
   publish
 - test $TRAVIS_SCALA_VERSION == "2.11.4" && test $TRAVIS_PULL_REQUEST == "false" &&
   test $TRAVIS_BRANCH == "master"
-notifications:
-  irc: chat.freenode.net#http4s
