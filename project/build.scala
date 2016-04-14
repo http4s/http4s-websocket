@@ -46,10 +46,10 @@ object ApplicationBuild extends Build {
 
     fork in run := true,
 
-    libraryDependencies += specs2 % "test"
+    libraryDependencies += specs2Core % "test"
   )
 
-  lazy val specs2 =    "org.specs2"    %% "specs2"    % "2.4"
+  lazy val specs2Core =    "org.specs2"    %% "specs2-core"    % "3.7.3"
 
   /* publishing */
   lazy val publishing = Seq(
