@@ -5,14 +5,13 @@ import scala.util.Properties
 object ApplicationBuild extends Build {
 
   /* Projects */
-  lazy val `http4s-websocket` = project
-    .in(file("."))
+  lazy val root = Project("http4s-websocket", file("."))
     .settings(buildSettings: _*)
 
   val JvmTarget = "1.7"
 
   /* global build settings */
-  lazy val buildSettings = Defaults.defaultSettings ++ publishing ++ Seq(
+  lazy val buildSettings = publishing ++ Seq(
     organization := "org.http4s",
 
     version := "0.1.3-SNAPSHOT",
