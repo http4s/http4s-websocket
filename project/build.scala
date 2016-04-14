@@ -75,7 +75,7 @@ object ApplicationBuild extends Build {
         <developer>
           <id>bryce-anderson</id>
           <name>Bryce L. Anderson</name>
-          <email>bryce.anderson22@gamil.com</email>
+          <email>bryce.anderson22@gmail.com</email>
         </developer>
         <developer>
           <id>rossabaker</id>
