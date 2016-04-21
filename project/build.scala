@@ -49,7 +49,7 @@ object ApplicationBuild extends Build {
     libraryDependencies += specs2Core % "test"
   )
 
-  lazy val specs2Core =    "org.specs2"    %% "specs2-core"    % "3.7.3"
+  lazy val specs2Core =    "org.specs2"    %% "specs2-core"    % "3.7.2"
 
   /* publishing */
   lazy val publishing = Seq(
