@@ -8,7 +8,7 @@ object ApplicationBuild extends Build {
   lazy val root = Project("http4s-websocket", file("."))
     .settings(buildSettings: _*)
 
-  val JvmTarget = "1.7"
+  val JvmTarget = "1.8"
 
   /* global build settings */
   lazy val buildSettings = publishing ++ Seq(
