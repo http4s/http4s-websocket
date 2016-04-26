@@ -18,7 +18,7 @@ object ApplicationBuild extends Build {
 
     scalaVersion := "2.11.8",
 
-    crossScalaVersions := Seq("2.10.6", "2.11.8"),
+    crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.0-M4"),
 
     description := "common websocket support for variou sservers",
 
@@ -46,10 +46,13 @@ object ApplicationBuild extends Build {
 
     fork in run := true,
 
-    libraryDependencies += specs2Core % "test"
+    libraryDependencies += specs2Core(scalaVersion.value) % "test"
   )
 
-  lazy val specs2Core =    "org.specs2"    %% "specs2-core"    % "3.7.2"
+  def specs2Core(sv: String) = "org.specs2" %% "specs2-core" % (sv match {
+    case "2.12.0-M4" => "3.7.3.1"
+    case _ => "3.7.3"
+  })
 
   /* publishing */
   lazy val publishing = Seq(
