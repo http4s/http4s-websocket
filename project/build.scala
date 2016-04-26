@@ -8,7 +8,7 @@ object ApplicationBuild extends Build {
   lazy val root = Project("http4s-websocket", file("."))
     .settings(buildSettings: _*)
 
-  val JvmTarget = "1.8"
+  val jvmTarget = TaskKey[String]("jvm-target-version", "Defines the target JVM version for object files.")
 
   /* global build settings */
   lazy val buildSettings = publishing ++ Seq(
@@ -36,13 +36,20 @@ object ApplicationBuild extends Build {
       )
     ),
 
-    scalacOptions in ThisBuild ++= Seq(
+    jvmTarget <<= scalaVersion.map {
+      VersionNumber(_).numbers match {
+        case Seq(2, 10, _*) => "1.7"
+        case _ => "1.8"
+      }
+    },
+
+    scalacOptions in ThisBuild <<= jvmTarget.map { jvm => Seq(
       "-feature",
       "-deprecation",
       "-unchecked",
       "-language:implicitConversions",
-     s"-target:jvm-${JvmTarget}"
-    ),
+      s"-target:jvm-$jvm"
+    )},
 
     fork in run := true,
 
