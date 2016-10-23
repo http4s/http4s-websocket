@@ -54,10 +54,8 @@ object ApplicationBuild extends Build {
 
     fork in run := true,
 
-    libraryDependencies += specs2Core(scalaVersion.value) % "test"
+    libraryDependencies += "org.specs2" %% "specs2-core" % "3.8.5.1" % "test"
   )
-
-  def specs2Core(sv: String) = "org.specs2" %% "specs2-core" % "3.8.5.1"
 
   /* publishing */
   lazy val publishing = Seq(
