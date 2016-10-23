@@ -20,7 +20,7 @@ object ApplicationBuild extends Build {
 
     crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.0-RC2"),
 
-    description := "common websocket support for variou sservers",
+    description := "common websocket support for various servers",
 
     homepage := Some(url("https://github.com/http4s/http4s-websocket")),
 
