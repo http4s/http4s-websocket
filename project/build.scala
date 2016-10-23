@@ -14,7 +14,7 @@ object ApplicationBuild extends Build {
   lazy val buildSettings = publishing ++ Seq(
     organization := "org.http4s",
 
-    version := "0.2.0-SNAPSHOT",
+    version := "0.1.4-SNAPSHOT",
 
     scalaVersion := "2.11.8",
 
@@ -39,6 +39,7 @@ object ApplicationBuild extends Build {
     jvmTarget <<= scalaVersion.map {
       VersionNumber(_).numbers match {
         case Seq(2, 10, _*) => "1.7"
+        case Seq(2, 11, _*) => "1.7"
         case _ => "1.8"
       }
     },
