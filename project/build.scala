@@ -14,11 +14,11 @@ object ApplicationBuild extends Build {
   lazy val buildSettings = publishing ++ Seq(
     organization := "org.http4s",
 
-    version := "0.1.4",
+    version := "0.1.5",
 
     scalaVersion := "2.11.8",
 
-    crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.0-RC2"),
+    crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.0"),
 
     description := "common websocket support for various servers",
 
@@ -36,13 +36,10 @@ object ApplicationBuild extends Build {
       )
     ),
 
-    jvmTarget <<= scalaVersion.map {
-      VersionNumber(_).numbers match {
-        case Seq(2, 10, _*) => "1.7"
-        case Seq(2, 11, _*) => "1.7"
-        case _ => "1.8"
-      }
-    },
+    jvmTarget := (VersionNumber(scalaVersion.value).numbers match {
+      case Seq(2, 10, _*) => "1.7"
+      case _ => "1.8"
+    }),
 
     scalacOptions in ThisBuild <<= jvmTarget.map { jvm => Seq(
       "-feature",
@@ -52,9 +49,14 @@ object ApplicationBuild extends Build {
       s"-target:jvm-$jvm"
     )},
 
+    javacOptions in ThisBuild ++= Seq(
+      "-source", jvmTarget.value,
+      "-target", jvmTarget.value
+    ),
+
     fork in run := true,
 
-    libraryDependencies += "org.specs2" %% "specs2-core" % "3.8.5.1" % "test"
+    libraryDependencies += "org.specs2" %% "specs2-core" % "3.8.6" % "test"
   )
 
   /* publishing */
