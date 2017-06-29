@@ -32,9 +32,9 @@ object ApplicationBuild extends Build {
 
     version := "0.2.0-SNAPSHOT",
 
-    scalaVersion := "2.11.8",
+    scalaVersion := "2.11.11",
 
-    crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.0"),
+    crossScalaVersions := Seq("2.10.6", "2.11.11", "2.12.2"),
 
     description := "common websocket support for various servers",
 
