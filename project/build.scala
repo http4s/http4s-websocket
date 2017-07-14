@@ -1,24 +1,40 @@
 import sbt._
 import Keys._
 import scala.util.Properties
+import org.scalajs.sbtplugin.ScalaJSPlugin
+import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 
 object ApplicationBuild extends Build {
 
   /* Projects */
-  lazy val root = Project("http4s-websocket", file("."))
+  lazy val root = project.in(file("."))
     .settings(buildSettings: _*)
+    .aggregate(http4sWebsocketJVM, http4sWebsocketJS)
+    .settings(
+      publish := {},
+      publishLocal := {}
+    )
+
+  lazy val http4sWebsocket = crossProject.in(file("."))
+    .settings(buildSettings: _*)
+
+  lazy val http4sWebsocketJVM = http4sWebsocket.jvm
+
+  lazy val http4sWebsocketJS = http4sWebsocket.js
 
   val jvmTarget = TaskKey[String]("jvm-target-version", "Defines the target JVM version for object files.")
 
   /* global build settings */
   lazy val buildSettings = publishing ++ Seq(
+    name := "http4s-websocket",
+
     organization := "org.http4s",
 
     version := "0.2.0-SNAPSHOT",
 
-    scalaVersion := "2.11.8",
+    scalaVersion := "2.11.11",
 
-    crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.0"),
+    crossScalaVersions := Seq("2.10.6", "2.11.11", "2.12.2"),
 
     description := "common websocket support for various servers",
 
@@ -32,6 +48,7 @@ object ApplicationBuild extends Build {
       ScmInfo(
         url("https://github.com/http4s/http4s-websocket"),
         "scm:git:https://github.com/http4s/http4s-websocket.git",
+
         Some("scm:git:git@github.com:http4s/http4s-websocket.git")
       )
     ),

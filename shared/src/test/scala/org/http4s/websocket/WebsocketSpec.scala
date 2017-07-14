@@ -21,7 +21,6 @@ class WebsocketSpec extends Specification {
   def decode(msg: Array[Byte], isClient: Boolean): WebSocketFrame =
     new FrameTranscoder(isClient).bufferToFrame(ByteBuffer.wrap(msg))
 
-
   def encode(msg: WebSocketFrame, isClient: Boolean): Array[Byte] = {
     val msgs = new FrameTranscoder(isClient).frameToBuffer(msg)
     val sz = msgs.foldLeft(0)((c, i) => c + i.remaining())
