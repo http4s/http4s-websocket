@@ -138,5 +138,23 @@ object WebsocketBits {
     }
   }
 
+  class InvalidCloseCodeException(i: Int) extends RuntimeException
+
+  private def toUnsigned(x: Int) = Array[Byte](((x >> 8)& 0xFF).toByte, (x & 0xFF).toByte)
+
+  private def validCloseCode(code: Int): Either[InvalidCloseCodeException, Array[Byte]] = {
+    if (code < 1000 || code > 4999) Left(new InvalidCloseCodeException(code)) else Right(toUnsigned(code))
+  }
+
+  object Close {
+    def apply(code: Int): Either[InvalidCloseCodeException, Close] = {
+      validCloseCode(code).right.map(Close(_))
+    }
+
+    def apply(code: Int, reason: String): Either[InvalidCloseCodeException, Close] = {
+      validCloseCode(code).right.map(c => Close(c ++ reason.getBytes(UTF_8)))
+    }
+  }
+
 
 }

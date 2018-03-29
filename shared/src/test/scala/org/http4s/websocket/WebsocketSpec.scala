@@ -72,6 +72,24 @@ class WebsocketSpec extends Specification {
       new String(msg.data, UTF_8) should_== "Hello"
     }
 
+    "encode a close message" in {
+      val frame = Close(1000, "some reason").right.get
+      val msg = decode(encode(frame, true), false)
+      msg should_== frame
+      msg.last should_== true
+      val closeCode = msg.data.slice(0,2)
+      (closeCode(0) << 8 & 0xff00) | (closeCode(1) & 0xff) should_== 1000
+      val reason = msg.data.slice(2, msg.data.length)
+      new String(reason, UTF_8) should_== "some reason"
+    }
+
+    "refuse to encode a close message with an invalid close code" in {
+      val invalidCloseCode = 9999
+      val result = Close(invalidCloseCode)
+
+      result isLeft
+    }
+
     "encode and decode a message with 125 < len <= 0xffff" in {
       val bytes = (0 until 0xfff).map(_.toByte).toArray
       val frame = Binary(bytes, false)
