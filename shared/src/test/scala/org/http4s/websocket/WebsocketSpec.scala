@@ -1,16 +1,18 @@
 package org.http4s.blaze.http.websocket
 
-import org.http4s.websocket.FrameTranscoder
+import org.http4s.websocket.{FrameTranscoder, WebsocketBits}
 import org.http4s.websocket.WebsocketBits._
-
 import java.nio.ByteBuffer
-
 import java.nio.charset.StandardCharsets.UTF_8
 
 import org.specs2.mutable.Specification
+import org.scalacheck.Prop._
+import org.scalacheck.Gen._
+import org.scalacheck.Arbitrary.arbitrary
+import org.specs2.ScalaCheck
 
 
-class WebsocketSpec extends Specification {
+class WebsocketSpec extends Specification with ScalaCheck {
 
   def helloTxtMasked = Array(0x81, 0x85, 0x37, 0xfa,
     0x21, 0x3d, 0x7f, 0x9f,
@@ -73,21 +75,36 @@ class WebsocketSpec extends Specification {
     }
 
     "encode a close message" in {
-      val frame = Close(1000, "some reason").right.get
-      val msg = decode(encode(frame, true), false)
-      msg should_== frame
-      msg.last should_== true
-      val closeCode = msg.data.slice(0,2)
-      (closeCode(0) << 8 & 0xff00) | (closeCode(1) & 0xff) should_== 1000
-      val reason = msg.data.slice(2, msg.data.length)
-      new String(reason, UTF_8) should_== "some reason"
+
+      val reasonGen = for {
+        length <- choose(0, 30)//UTF-8 chars are at most 4 bytes, byte limit is 123
+        chars  <- listOfN(length, arbitrary[Char])
+      } yield chars.mkString
+
+      forAll(choose(1000,4999), reasonGen) { (validCloseCode: Int, validReason: String) =>
+        val frame = Close(validCloseCode, validReason).right.get
+        val msg = decode(encode(frame, true), false)
+        msg should_== frame
+        msg.last should_== true
+        val closeCode = msg.data.slice(0,2)
+        (closeCode(0) << 8 & 0xff00) | (closeCode(1) & 0xff) should_== validCloseCode
+        val reason = msg.data.slice(2, msg.data.length)
+        new String(reason, UTF_8) should_== validReason
+      }
     }
 
     "refuse to encode a close message with an invalid close code" in {
-      val invalidCloseCode = 9999
-      val result = Close(invalidCloseCode)
+      forAll { closeCode: Int =>
+        (closeCode < 1000 || closeCode > 4999) ==> Close(closeCode).isLeft
+      }
+    }
 
-      result isLeft
+    "refuse to encode a close message with a reason that is too large" in {
+      val validCloseCode = 1000
+
+      forAll { reason: String =>
+        (reason.getBytes(UTF_8).length > 123) ==> Close(validCloseCode, reason).isLeft
+      }
     }
 
     "encode and decode a message with 125 < len <= 0xffff" in {
