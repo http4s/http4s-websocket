@@ -138,5 +138,37 @@ object WebsocketBits {
     }
   }
 
+  sealed trait InvalidCloseDataException extends RuntimeException
+  class InvalidCloseCodeException(i: Int) extends InvalidCloseDataException
+  class ReasonTooLongException(s: String) extends InvalidCloseDataException
+
+  private def toUnsignedShort(x: Int) = Array[Byte](((x >> 8) & 0xFF).toByte, (x & 0xFF).toByte)
+
+  private def reasonToBytes(reason: String) = {
+    val asBytes = reason.getBytes(UTF_8)
+    if (asBytes.length > 123) {
+      Left(new ReasonTooLongException(reason))
+    } else {
+      Right(asBytes)
+    }
+  }
+
+  private def closeCodeToBytes(code: Int): Either[InvalidCloseCodeException, Array[Byte]] = {
+    if (code < 1000 || code > 4999) Left(new InvalidCloseCodeException(code)) else Right(toUnsignedShort(code))
+  }
+
+  object Close {
+    def apply(code: Int): Either[InvalidCloseDataException, Close] = {
+      closeCodeToBytes(code).right.map(Close(_))
+    }
+
+    def apply(code: Int, reason: String): Either[InvalidCloseDataException, Close] = {
+      for {
+        c <- closeCodeToBytes(code).right
+        r <- reasonToBytes(reason).right
+      } yield Close(c ++ r)
+    }
+  }
+
 
 }

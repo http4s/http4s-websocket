@@ -6,6 +6,8 @@ import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 
 object ApplicationBuild extends Build {
 
+  val specsVersion = "3.8.6"
+
   /* Projects */
   lazy val root = project.in(file("."))
     .settings(buildSettings: _*)
@@ -73,7 +75,11 @@ object ApplicationBuild extends Build {
 
     fork in run := true,
 
-    libraryDependencies += "org.specs2" %% "specs2-core" % "3.8.6" % "test"
+    libraryDependencies ++= Seq(
+      "org.specs2" %% "specs2-core" % specsVersion % "test",
+      "org.specs2" %% "specs2-scalacheck" % specsVersion % "test",
+      "org.scalacheck" %% "scalacheck" % "1.13.4" % "test"
+    )
   )
 
   /* publishing */
