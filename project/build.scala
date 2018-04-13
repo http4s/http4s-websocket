@@ -32,11 +32,11 @@ object ApplicationBuild extends Build {
 
     organization := "org.http4s",
 
-    version := "0.2.1-SNAPSHOT",
+    version := "0.2.1",
 
-    scalaVersion := "2.11.11",
+    scalaVersion := "2.11.12",
 
-    crossScalaVersions := Seq("2.10.6", "2.11.11", "2.12.2"),
+    crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.5"),
 
     description := "common websocket support for various servers",
 
