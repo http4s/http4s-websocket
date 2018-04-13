@@ -32,7 +32,7 @@ object ApplicationBuild extends Build {
 
     organization := "org.http4s",
 
-    version := "0.2.1",
+    version := "0.2.2-SNAPSHOT",
 
     scalaVersion := "2.11.11",
 
