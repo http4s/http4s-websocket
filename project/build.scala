@@ -60,13 +60,13 @@ object ApplicationBuild extends Build {
       case _ => "1.8"
     }),
 
-    scalacOptions in ThisBuild <<= jvmTarget.map { jvm => Seq(
+    scalacOptions in ThisBuild := Seq(
       "-feature",
       "-deprecation",
       "-unchecked",
       "-language:implicitConversions",
-      s"-target:jvm-$jvm"
-    )},
+      s"-target:jvm-${jvmTarget.value}"
+    ),
 
     javacOptions in ThisBuild ++= Seq(
       "-source", jvmTarget.value,
@@ -85,9 +85,9 @@ object ApplicationBuild extends Build {
   /* publishing */
   lazy val publishing = Seq(
     publishMavenStyle := true,
-    publishTo <<= version { (v: String) =>
+    publishTo := {
       val nexus = "https://oss.sonatype.org/"
-      if (v.trim.endsWith("SNAPSHOT")) Some(
+      if (version.value.trim.endsWith("SNAPSHOT")) Some(
         "snapshots" at nexus + "content/repositories/snapshots"
       )
       else Some("releases" at nexus + "service/local/staging/deploy/maven2")
