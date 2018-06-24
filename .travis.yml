@@ -1,8 +1,9 @@
 language: scala
 scala:
-- 2.10.6
-- 2.11.11
-- 2.12.2
+- 2.10.7
+- 2.11.12
+- 2.12.6
+- 2.13.0-M4
 
 jdk: oraclejdk8
 
@@ -19,5 +20,5 @@ script: sbt ++$TRAVIS_SCALA_VERSION test
 after_success:
 - test $TRAVIS_PULL_REQUEST == "false" && test $TRAVIS_BRANCH == "master" && sbt ++$TRAVIS_SCALA_VERSION
   publish
-- test $TRAVIS_SCALA_VERSION == "2.11.4" && test $TRAVIS_PULL_REQUEST == "false" &&
+- test $TRAVIS_SCALA_VERSION == "2.11.12" && test $TRAVIS_PULL_REQUEST == "false" &&
   test $TRAVIS_BRANCH == "master"
