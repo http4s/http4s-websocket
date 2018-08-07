@@ -2,8 +2,7 @@ package org.http4s.websocket
 
 import java.nio.charset.StandardCharsets._
 import java.security.MessageDigest
-import javax.xml.bind.DatatypeConverter._
-
+import java.util.Base64
 import scala.util.Random
 
 
@@ -19,7 +18,7 @@ object WebsocketHandshake {
     val key = {
       val bytes = new Array[Byte](16)
       Random.nextBytes(bytes)
-      printBase64Binary(bytes)
+      Base64.getEncoder.encodeToString(bytes)
     }
 
     /** Initial headers to send to the server */
@@ -68,7 +67,7 @@ object WebsocketHandshake {
     headers.exists{ case (k, v) => k.equalsIgnoreCase("Upgrade") && v.equalsIgnoreCase("websocket") }
   }
 
-  private def decodeLen(key: String): Int = parseBase64Binary(key).length
+  private def decodeLen(key: String): Int = Base64.getDecoder.decode(key).length
 
   private def genAcceptKey(str: String): String = {
     val crypt = MessageDigest.getInstance("SHA-1")
@@ -76,7 +75,7 @@ object WebsocketHandshake {
     crypt.update(str.getBytes(US_ASCII))
     crypt.update(magicString)
     val bytes = crypt.digest()
-    printBase64Binary(bytes)
+    Base64.getEncoder.encodeToString(bytes)
   }
 
   private[websocket] def valueContains(key: String, value: String): Boolean = {
