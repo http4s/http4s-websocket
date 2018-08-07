@@ -1,12 +1,20 @@
 import sbt._
 import Keys._
 import scala.util.Properties
-import org.scalajs.sbtplugin.ScalaJSPlugin
-import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
+import sbtcrossproject.CrossPlugin.autoImport._
+import scalajscrossproject.ScalaJSCrossPlugin.autoImport._
 
 object ApplicationBuild extends Build {
 
-  val specsVersion = "3.8.6"
+  val specsVersion = Def.setting {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, v)) if v >= 11 =>
+        "4.3.0"
+      case _ =>
+        // specs2 4.x drop Scala 2.10 support
+        "3.8.6"
+    }
+  }
 
   /* Projects */
   lazy val root = project.in(file("."))
@@ -17,7 +25,7 @@ object ApplicationBuild extends Build {
       publishLocal := {}
     )
 
-  lazy val http4sWebsocket = crossProject.in(file("."))
+  lazy val http4sWebsocket = crossProject(JSPlatform, JVMPlatform).in(file("."))
     .settings(buildSettings: _*)
 
   lazy val http4sWebsocketJVM = http4sWebsocket.jvm
@@ -34,9 +42,9 @@ object ApplicationBuild extends Build {
 
     version := "0.2.2-SNAPSHOT",
 
-    scalaVersion := "2.11.11",
+    scalaVersion := "2.11.12",
 
-    crossScalaVersions := Seq("2.10.6", "2.11.11", "2.12.2"),
+    crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.6", "2.13.0-M4"),
 
     description := "common websocket support for various servers",
 
@@ -76,9 +84,7 @@ object ApplicationBuild extends Build {
     fork in run := true,
 
     libraryDependencies ++= Seq(
-      "org.specs2" %% "specs2-core" % specsVersion % "test",
-      "org.specs2" %% "specs2-scalacheck" % specsVersion % "test",
-      "org.scalacheck" %% "scalacheck" % "1.13.4" % "test"
+      "org.specs2" %% "specs2-scalacheck" % specsVersion.value % "test"
     )
   )
 
