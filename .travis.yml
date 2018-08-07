@@ -1,11 +1,17 @@
 language: scala
-scala:
-- 2.10.7
-- 2.11.12
-- 2.12.6
-- 2.13.0-M4
 
-jdk: oraclejdk8
+matrix:
+  include:
+  - jdk: oraclejdk8
+    scala: 2.13.0-M4
+  - jdk: oraclejdk8
+    scala: 2.12.6
+  - jdk: oraclejdk8
+    scala: 2.11.12
+  - jdk: oraclejdk8
+    scala: 2.10.7
+  - jdk: oraclejdk10
+    scala: 2.12.6
 
 sudo: false
 cache:
