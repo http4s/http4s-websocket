@@ -161,11 +161,11 @@ class FrameTranscoder(val isClient: Boolean) {
         null
       }
 
-      val oldLim = in.limit
+      val oldLim = in.limit()
       val bodylen = FrameTranscoder.bodyLength(in)
 
       in.position(bodyOffset)
-      in.limit(in.position + bodylen)
+      in.limit(in.position() + bodylen)
 
       val slice = in.slice
       in.position(in.limit)
